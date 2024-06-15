@@ -1,40 +1,23 @@
 import requests
 import json
 
-corpus_of_documents = [
-    "Take a leisurely walk in the park and enjoy the fresh air.",
-    "Visit a local museum and discover something new.",
-    "Attend a live music concert and feel the rhythm.",
-    "Go for a hike and admire the natural scenery.",
-    "Have a picnic with friends and share some laughs.",
-    "Explore a new cuisine by dining at an ethnic restaurant.",
-    "Take a yoga class and stretch your body and mind.",
-    "Join a local sports league and enjoy some friendly competition.",
-    "Attend a workshop or lecture on a topic you're interested in.",
-    "Visit an amusement park and ride the roller coasters.",
-]
+from lib.load_documents import load_documents
+import lib.jaccard as jaccard
 
-
-def jaccard_similarity(query, document):
-    query = query.lower().split(" ")
-    document = document.lower().split(" ")
-    intersection = set(query).intersection(set(document))
-    union = set(query).union(set(document))
-    return len(intersection) / len(union)
+corpus_of_documents = load_documents()
 
 
 def return_response(query, corpus):
     similarities = []
     for doc in corpus:
-        similarity = jaccard_similarity(query, doc)
+        similarity = jaccard.similarity(query, doc)
         similarities.append(similarity)
     return corpus_of_documents[similarities.index(max(similarities))]
 
 
 user_input = "I like to hike"
 relevant_document = return_response(user_input, corpus_of_documents)
-full_response = []
-# https://github.com/jmorganca/ollama/blob/main/docs/api.md
+
 prompt = f"""
 You are a bot that makes recommendations for activities. You answer in very short sentences and do not include extra information.
 
@@ -52,6 +35,7 @@ data = {
 }
 headers = {"Content-Type": "application/json"}
 response = requests.post(url, data=json.dumps(data), headers=headers, stream=True)
+full_response = []
 try:
     count = 0
     for line in response.iter_lines():
