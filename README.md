@@ -1,5 +1,11 @@
 # Retrieval-Augmented Generation Demo
 
+## References
+
+- https://learnbybuilding.ai/tutorials/rag-from-scratch
+- https://learnbybuilding.ai/tutorials/rag-from-scratch-part-2-semantics-and-cosine-similarity
+- https://github.com/ollama/ollama
+
 ## Overview
 
 This repository contains three demo examples of retrieval-augmented generation (RAG).
